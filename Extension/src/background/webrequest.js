@@ -136,12 +136,14 @@ const webrequestInit = function () {
         }
 
         // Record request for other types
-        requestContextStorage.record({
+        const context = requestContextStorage.record({
             requestId,
             requestUrl,
             referrerUrl,
             originUrl,
+            // TODO: use single requestType field
             requestType,
+            engineRequestType: RequestTypes.transformRequestType(requestType),
             tab,
             method,
         });
@@ -215,19 +217,12 @@ const webrequestInit = function () {
             const htmlRules = webRequestService.getContentRules(tab, referrerUrl) || [];
 
             if (replaceRules.length > 0 || htmlRules.length > 0) {
-                const request = new TSUrlFilter.Request(
-                    requestUrl, referrerUrl, RequestTypes.transformRequestType(requestType),
-                );
-                request.requestId = requestId;
-                request.tabId = tab.tabId;
-                request.method = method;
-
                 // Bypass images
                 // https://github.com/AdguardTeam/AdguardBrowserExtension/issues/1906
                 if (requestType !== RequestTypes.IMAGE) {
                     contentFiltering.onBeforeRequest(
                         backgroundPage.webRequest.filterResponseData(requestId),
-                        request,
+                        context,
                         replaceRules || [],
                         htmlRules || [],
                     );

@@ -45,6 +45,7 @@ export const requestContextStorage = (function () {
      * @property {string} requestUrl - Request url
      * @property {string} referrerUrl - Request referrer url
      * @property {string} requestType - Request type
+     * @property {number} engineRequestType - TsUrlFilter Request type
      * @property {{tabId: Number}} tab - Request tab
      * @property {Array} requestHeaders - Original request headers
      * @property {Array} modifiedRequestHeaders - Modified request headers
@@ -134,6 +135,7 @@ export const requestContextStorage = (function () {
      * @param {string} params.referrerUrl Request referrer url
      * @param {string} params.originUrl Request origin url (initiator)
      * @param {string} params.requestType Request type
+     * @param {string} params.engineRequestType TsUrlFilter Request type
      * @param {Object} params.tab Request tab
      * @param {string} params.method Request HTTP method
      */
@@ -143,6 +145,7 @@ export const requestContextStorage = (function () {
         referrerUrl,
         originUrl,
         requestType,
+        engineRequestType,
         tab,
         method,
     }) => {
@@ -161,6 +164,7 @@ export const requestContextStorage = (function () {
             referrerUrl,
             originUrl,
             requestType,
+            engineRequestType,
             tab,
             eventId,
             requestState: States.PROCESSING,
@@ -179,6 +183,8 @@ export const requestContextStorage = (function () {
             eventId,
             method,
         });
+
+        return context;
     };
 
     /**
