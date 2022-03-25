@@ -217,12 +217,16 @@ const webrequestInit = function () {
             const htmlRules = webRequestService.getContentRules(tab, referrerUrl) || [];
 
             if (replaceRules.length > 0 || htmlRules.length > 0) {
-                // Bypass images and fonts
-                // https://github.com/AdguardTeam/AdguardBrowserExtension/issues/1906
-                if (
-                    requestType !== RequestTypes.IMAGE
-                    && requestType !== RequestTypes.FONT
-                ) {
+                const supportedStreamFilterRequestTypes = [
+                    RequestTypes.DOCUMENT,
+                    RequestTypes.SUBDOCUMENT,
+                    RequestTypes.STYLESHEET,
+                    RequestTypes.SCRIPT,
+                    RequestTypes.XMLHTTPREQUEST,
+                    RequestTypes.OTHER,
+                ];
+
+                if (supportedStreamFilterRequestTypes.includes(requestType)) {
                     contentFiltering.onBeforeRequest(
                         backgroundPage.webRequest.filterResponseData(requestId),
                         context,
