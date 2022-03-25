@@ -124,7 +124,7 @@ export const requestContextStorage = (function () {
      * @param {string} requestId Request identifier
      */
     const get = (requestId) => {
-        return contexts.get(requestId);
+        return contexts.get(String(requestId));
     };
 
     /**
@@ -152,7 +152,7 @@ export const requestContextStorage = (function () {
         const eventId = getNextEventId();
 
         // Clears filtering log. If contexts map already contains this requests that means that we caught redirect
-        if (requestType === RequestTypes.DOCUMENT && !contexts.has(requestId)) {
+        if (requestType === RequestTypes.DOCUMENT && !contexts.has(String(requestId))) {
             filteringLog.clearEventsByTabId(tab.tabId);
         }
 
@@ -172,7 +172,7 @@ export const requestContextStorage = (function () {
             timestamp,
             method,
         };
-        contexts.set(requestId, context);
+        contexts.set(String(requestId), context);
 
         filteringLog.addHttpRequestEvent({
             tab,
@@ -221,7 +221,7 @@ export const requestContextStorage = (function () {
      * @param {RequestContext} update
      */
     const update = (requestId, update) => {
-        const context = contexts.get(requestId);
+        const context = contexts.get(String(requestId));
         if (!context) {
             return;
         }
@@ -285,7 +285,7 @@ export const requestContextStorage = (function () {
      * @param {object} elementHtml Serialized HTML element
      */
     const bindContentRule = (requestId, rule, elementHtml) => {
-        const context = contexts.get(requestId);
+        const context = contexts.get(String(requestId));
         if (!context) {
             return;
         }
@@ -316,7 +316,7 @@ export const requestContextStorage = (function () {
      * @param {string} requestId Request identifier
      */
     const remove = (requestId) => {
-        const context = contexts.get(requestId);
+        const context = contexts.get(String(requestId));
         if (!context) {
             return;
         }
@@ -405,7 +405,7 @@ export const requestContextStorage = (function () {
         // All processes finished
         if (context.requestState === States.NONE
             && context.contentModifyingState === States.NONE) {
-            contexts.delete(requestId);
+            contexts.delete(String(requestId));
         }
     };
 
