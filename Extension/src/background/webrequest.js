@@ -217,9 +217,12 @@ const webrequestInit = function () {
             const htmlRules = webRequestService.getContentRules(tab, referrerUrl) || [];
 
             if (replaceRules.length > 0 || htmlRules.length > 0) {
-                // Bypass images
+                // Bypass images and fonts
                 // https://github.com/AdguardTeam/AdguardBrowserExtension/issues/1906
-                if (requestType !== RequestTypes.IMAGE) {
+                if (
+                    requestType !== RequestTypes.IMAGE
+                    && requestType !== RequestTypes.FONT
+                ) {
                     contentFiltering.onBeforeRequest(
                         backgroundPage.webRequest.filterResponseData(requestId),
                         context,
